@@ -43,6 +43,7 @@ function App() {
           }
       })
 
+      console.log(res.data)
       setResults(res.data)
     } catch (error) {
       console.log(error)
@@ -69,17 +70,35 @@ function App() {
         <a href="http://localhost:8080/login">login to spotify</a>
       ) : (
         <>
-          <h1>hello {name} u are logged in</h1>
+          <h1 className="font-asap text-3xl font-bold">hello {name} u are logged in</h1>
           <div className="buttons-div">
-            <button onClick={getArtists}>get artists</button>
-            <button onClick={getTracks}>get tracks</button>
-            <button onClick={logout}>log out</button>
+            <button 
+              className="bg-blue-500 hover:bg-blue-700 text-white font-asap py-2 px-4 rounded-full"
+              onClick={getArtists}>get artists</button>
+            <button 
+              className="bg-blue-500 hover:bg-blue-700 text-white font-asap py-2 px-4 rounded-full"
+              onClick={getTracks}>get tracks</button>
+            <button 
+              className="bg-blue-500 hover:bg-blue-700 text-white font-asap py-2 px-4 rounded-full"
+              onClick={logout}>log out</button>
           </div>
-          <div>
+          <div className="w-3/4 space-y-6">
             {results.items ?
               results.items.map((item, idx) => (
-                <div key={idx} className="card">
-                  <p key={item.name}>{item.name}</p>
+                <div 
+                  key={idx} 
+                  style={{ 
+                    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${item.images[0].url})`,
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "cover",
+                    height: "300px",
+                    backgroundPosition: "center"
+                  }}
+                  className="p-6 rounded-xl shadow-xl flex items-center justify-center">
+                  <p 
+                    key={item.name}
+                    className="font-asap text-3xl text-cyan-400"
+                    >{item.name}</p>
                 </div>
               )) :
               <h1>click to get results</h1>
