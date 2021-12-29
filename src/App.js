@@ -3,6 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 import { accessToken, logout } from "./spotify";
+import Results from "./components/Results";
 
 async function getSelf(tok) {
   const self = await axios.get("https://api.spotify.com/v1/me", {
@@ -43,8 +44,8 @@ function App() {
           }
       })
 
-      console.log(res.data)
       setResults(res.data)
+
     } catch (error) {
       console.log(error)
     }
@@ -59,6 +60,7 @@ function App() {
       })
 
       setResults(res.data)
+
     } catch (error) {
       console.log(error)
     }
@@ -70,40 +72,20 @@ function App() {
         <a href="http://localhost:8080/login">login to spotify</a>
       ) : (
         <>
-          <h1 className="font-asap text-3xl font-bold">hello {name} u are logged in</h1>
-          <div className="buttons-div">
+          <h1 className="font-asap text-3xl text-center text-green-800 font-bold p-4 drop-shadow-lg">TOP 10 IN PAST MONTH:</h1>
+          <h2 className="font-asap text-2xl text-green-300 ">{name}</h2>
+          <div className="p-4">
             <button 
-              className="bg-blue-500 hover:bg-blue-700 text-white font-asap py-2 px-4 rounded-full"
+              className="bg-green-300 hover:bg-green-500 hover:scale-110 text-white font-asap p-3 rounded-full m-1 drop-shadow-lg"
               onClick={getArtists}>get artists</button>
             <button 
-              className="bg-blue-500 hover:bg-blue-700 text-white font-asap py-2 px-4 rounded-full"
+              className="bg-green-300 hover:bg-green-500 hover:scale-110 text-white font-asap p-3 rounded-full m-1 drop-shadow-lg"
               onClick={getTracks}>get tracks</button>
             <button 
-              className="bg-blue-500 hover:bg-blue-700 text-white font-asap py-2 px-4 rounded-full"
+              className="bg-green-300 hover:bg-green-500 hover:scale-110 text-white font-asap p-3 rounded-full m-1 drop-shadow-lg"
               onClick={logout}>log out</button>
           </div>
-          <div className="w-3/4 space-y-6">
-            {results.items ?
-              results.items.map((item, idx) => (
-                <div 
-                  key={idx} 
-                  style={{ 
-                    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${item.images[0].url})`,
-                    backgroundRepeat: "no-repeat",
-                    backgroundSize: "cover",
-                    height: "300px",
-                    backgroundPosition: "center"
-                  }}
-                  className="p-6 rounded-xl shadow-xl flex items-center justify-center">
-                  <p 
-                    key={item.name}
-                    className="font-asap text-3xl text-cyan-400"
-                    >{item.name}</p>
-                </div>
-              )) :
-              <h1>click to get results</h1>
-            }
-          </div>
+          <Results results={results} />
         </>
       )}
     </div>
