@@ -21,6 +21,8 @@ function App() {
   const [token, setToken] = useState(null);
   const [name, setName] = useState(null);
   const [results, setResults] = useState([])
+  const [onRender, setOnRender] = useState(false)
+
 
 
   useEffect(() => {
@@ -34,12 +36,14 @@ function App() {
 
     getName();
     setToken(accessToken);
+    console.log(name)
 
   }, [token]);
 
 
   async function getArtists() {
     try {
+      setOnRender(!onRender)
       const res = await axios.get(`https://api.spotify.com/v1/me/top/artists?limit=10&time_range=short_term`, {
         headers: {
             Authorization: `Bearer ${token}`
@@ -55,6 +59,7 @@ function App() {
 
   async function getTracks() {
     try {
+      setOnRender(!onRender)
       const res = await axios.get(`https://api.spotify.com/v1/me/top/tracks?limit=10&time_range=short_term`, {
         headers: {
             Authorization: `Bearer ${token}`
@@ -70,16 +75,17 @@ function App() {
 
   return (
     <div className="App">
-    <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0, 5], fov: 50 }}>
-      <OrbitControls />
-      <ambientLight />
+    <Canvas>
+        <OrbitControls />
+      <ambientLight intensity={2} />
+      <pointLight position={[40, 40, 40]} />
       {!name ? (
         <Html>
         <a href="http://localhost:8080/login">login to spotify</a>
         </Html>
       ) : (
         <>
-        <Html scale={3} position={[0, 20, -60]} transform>
+        <Html position={[0, 0, 0]}>
           <h1 className="font-asap text-3xl text-center text-green-800 font-bold p-4 drop-shadow-lg">TOP 10 IN PAST MONTH:</h1>
           <h2 className="font-asap text-2xl text-center text-green-300 ">{name}</h2>
           <div className="p-4 flex justify-center">
@@ -94,7 +100,11 @@ function App() {
               onClick={logout}>log out</button>
           </div>
           </Html>
+          {onRender ?
           <Results results={results} />
+          :
+          null
+          } 
         </>
       )}
     </Canvas>
