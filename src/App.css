@@ -5,7 +5,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: aliceblue;
+    background-color: rgb(219, 238, 255);
 }
 
 body {
@@ -15,21 +15,41 @@ body {
     height: 100%;
 }
 
-.card {
-    background-color: bisque;
-    display: flex;
-    margin: 1em;
-    width: 80%;
-    border-radius: 30px;
+.modal {
+    position: fixed;
+    width: 70%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(219, 238, 255);
+    border-radius: 15px;
     padding: 2em;
-}
-
-.profile-img {
-    width: 8em;
-    padding: 1em;
-    border-radius: 20%;
-}
-
-.buttons-div {
-    display: flex;
-}
+    z-index: 1000;
+  }
+  
+  .modal.modal-fade {
+    animation: fadeIn 1s;
+    animation-fill-mode: forwards;
+    opacity: 0;
+  }
+  
+  .modal-overlay {
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.7);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+  }
+  
+  
+  @keyframes fadeIn {
+    0% {
+      /* animation-timing-function: cubic-bezier(0.2542, 0.7899, 0.3142, 0.8148); */
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }

@@ -5,8 +5,8 @@ import * as THREE from "three";
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 
-import Inter from "./Inter_Bold.json";
-import pibe from '../assets/pibe1.png'
+import Inter from "../assets/Inter_Bold.json";
+import { FaArrowRight, FaArrowLeft } from 'react-icons/fa';
 import { Html, OrbitControls } from "@react-three/drei";
 extend({ TextGeometry })
 
@@ -46,11 +46,16 @@ function Results(props) {
     console.log(props.results)
     console.log(count)
     if (props.results.items) {
-      setTexture(props.results.items[count].images[0].url)
+      if (props.type === 'ARTISTS') {
+        setTexture(props.results.items[count].images[0].url)
+      } else {
+        setTexture(props.results.items[count].album.images[0].url)
+      }
     }
   }, [])
 
   function onTextureChange(link) {
+
     const three_texture = new THREE.TextureLoader().load(link)
     three_texture.wrapS = THREE.RepeatWrapping
     three_texture.wrapT = THREE.RepeatWrapping
@@ -79,22 +84,29 @@ function Results(props) {
     <>
     {props.results.items ?
     <>
-    <div>
-    <button 
-      className="bg-green-300 hover:bg-green-500 hover:scale-110 text-white font-asap p-3 rounded-full m-1 drop-shadow-lg" 
-      onClick={onDecrement}>back</button>
-    <button 
-      className="bg-green-300 hover:bg-green-500 hover:scale-110 text-white font-asap p-3 rounded-full m-1 drop-shadow-lg"
-      onClick={onIncrement}>next</button>
+    <div className="flex p-3">
+    <FaArrowLeft 
+      className="text-green-300 text-3xl m-1 hover:cursor-pointer hover:scale-110"
+      onClick={onDecrement} />
+    <FaArrowRight 
+      className="text-green-300 text-3xl m-1 hover:cursor-pointer hover:scale-110"
+      onClick={onIncrement} />
     </div>
     <Canvas camera={{ position: [150, 20, 220]}}>
     <ambientLight intensity={2} />
     <pointLight position={[40, 40, 40]} />
     <OrbitControls autoRotate enablePan={false} enableZoom={false} maxPolarAngle={Math.PI / 2} minPolarAngle={Math.PI / 2} /> 
-      <mesh position={[-250, -10, -100]}>
+    {props.type === 'ARTISTS' ?
+      <mesh position={[-250, -10, -150]}>
         <textGeometry args={[`${count+1}. ${props.results.items[count].name}`, textOptions]} />
         <meshStandardMaterial attach="material" map={onTextureChange(props.results.items[count].images[0].url)} />
       </mesh>
+      :
+      <mesh position={[-250, -10, -150]}>
+        <textGeometry args={[`${count+1}. ${props.results.items[count].name}`, textOptions]} />
+        <meshStandardMaterial attach="material" map={onTextureChange(props.results.items[count].album.images[0].url)} />
+      </mesh>
+    }
     </Canvas>
     </>
     :
