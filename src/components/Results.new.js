@@ -7,7 +7,7 @@ import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 
 import Inter from "./Inter_Bold.json";
 import pibe from '../assets/pibe1.png'
-import { Html } from "@react-three/drei";
+import { Html, OrbitControls } from "@react-three/drei";
 extend({ TextGeometry })
 
 const testObj = [
@@ -32,9 +32,14 @@ function Results(props) {
   // configure font geometry
   const textOptions = {
     font,
-    size: 10, 
-    height: 2, 
-
+    size: 65, 
+    height: 10, 
+    curveSegments: 12,
+    bevelEnabled: true,
+    bevelThickness: 2, 
+    bevelSize: 1.5,
+    bevelOffset: 0,
+    bevelSegments: 2
   };
 
   useEffect(() => {
@@ -45,20 +50,11 @@ function Results(props) {
     }
   }, [])
 
-  const deg2rad = degrees => degrees * (Math.PI / 180);
-
-  useThree(({camera}) => {
-    camera.rotation.set(0, deg2rad(45), 0);
-    camera.position.set(-25, 5, 25)
-  })
-
-
-
   function onTextureChange(link) {
     const three_texture = new THREE.TextureLoader().load(link)
     three_texture.wrapS = THREE.RepeatWrapping
     three_texture.wrapT = THREE.RepeatWrapping
-    three_texture.repeat.set(0.3, 0.3);
+    three_texture.repeat.set(0.1, 0.1);
     return three_texture;
   }
 
@@ -83,17 +79,26 @@ function Results(props) {
     <>
     {props.results.items ?
     <>
-    <Html>
-      <button onClick={onDecrement}>back</button>
-      <button onClick={onIncrement}>next</button>
-    </Html>
-    <mesh position={[-20, -10, -10]}>
-      <textGeometry args={[`${count+1}. ${props.results.items[count].name}`, textOptions]} />
-      <meshStandardMaterial attach="material" map={onTextureChange(props.results.items[count].images[0].url)} />
-    </mesh>
+    <div>
+    <button 
+      className="bg-green-300 hover:bg-green-500 hover:scale-110 text-white font-asap p-3 rounded-full m-1 drop-shadow-lg" 
+      onClick={onDecrement}>back</button>
+    <button 
+      className="bg-green-300 hover:bg-green-500 hover:scale-110 text-white font-asap p-3 rounded-full m-1 drop-shadow-lg"
+      onClick={onIncrement}>next</button>
+    </div>
+    <Canvas camera={{ position: [150, 20, 220]}}>
+    <ambientLight intensity={2} />
+    <pointLight position={[40, 40, 40]} />
+    <OrbitControls autoRotate enablePan={false} enableZoom={false} maxPolarAngle={Math.PI / 2} minPolarAngle={Math.PI / 2} /> 
+      <mesh position={[-250, -10, -100]}>
+        <textGeometry args={[`${count+1}. ${props.results.items[count].name}`, textOptions]} />
+        <meshStandardMaterial attach="material" map={onTextureChange(props.results.items[count].images[0].url)} />
+      </mesh>
+    </Canvas>
     </>
     :
-    <Html><h1>click to see results</h1></Html>
+    <h1>click to see results</h1>
     }
     </>
   );

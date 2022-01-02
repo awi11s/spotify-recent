@@ -75,39 +75,31 @@ function App() {
 
   return (
     <div className="App">
-    <Canvas>
-        <OrbitControls />
-      <ambientLight intensity={2} />
-      <pointLight position={[40, 40, 40]} />
+
       {!name ? (
-        <Html>
         <a href="http://localhost:8080/login">login to spotify</a>
-        </Html>
       ) : (
         <>
-        <Html position={[0, 0, 0]}>
-          <h1 className="font-asap text-3xl text-center text-green-800 font-bold p-4 drop-shadow-lg">TOP 10 IN PAST MONTH:</h1>
+          <h1 className="font-asap text-3xl text-center text-green-800 font-bold p-4 drop-shadow-lg">YOUR FAVORITES RN:</h1>
           <h2 className="font-asap text-2xl text-center text-green-300 ">{name}</h2>
-          <div className="p-4 flex justify-center">
-            <button 
-              className="bg-green-300 hover:bg-green-500 hover:scale-110 text-white font-asap p-3 rounded-full m-1 drop-shadow-lg"
-              onClick={getArtists}>get artists</button>
-            <button 
-              className="bg-green-300 hover:bg-green-500 hover:scale-110 text-white font-asap p-3 rounded-full m-1 drop-shadow-lg"
-              onClick={getTracks}>get tracks</button>
-            <button 
-              className="bg-green-300 hover:bg-green-500 hover:scale-110 text-white font-asap p-3 rounded-full m-1 drop-shadow-lg"
-              onClick={logout}>log out</button>
-          </div>
-          </Html>
           {onRender ?
-          <Results results={results} />
+            <Results results={results} />
           :
           null
           } 
+            <div className="p-4 flex justify-center">
+              <button 
+                className="bg-green-300 hover:bg-green-500 hover:scale-110 text-white font-asap p-3 rounded-full m-1 drop-shadow-lg"
+                onClick={getArtists}>get artists</button>
+              <button 
+                className="bg-green-300 hover:bg-green-500 hover:scale-110 text-white font-asap p-3 rounded-full m-1 drop-shadow-lg"
+                onClick={getTracks}>get tracks</button>
+              <button 
+                className="bg-green-300 hover:bg-green-500 hover:scale-110 text-white font-asap p-3 rounded-full m-1 drop-shadow-lg"
+                onClick={logout}>log out</button>
+            </div>
         </>
       )}
-    </Canvas>
     </div>
   );
 }
